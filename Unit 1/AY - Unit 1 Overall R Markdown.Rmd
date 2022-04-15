@@ -1,0 +1,163 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+# Vectors
+age = c(22, 21, 24, 19, 20, 23)
+age
+age[1]
+yrs_math_ed = c(4, 5, 2, 5, 3, 5)
+yrs_math_ed
+
+# Data frames
+df1 = data.frame(Age = age, Years = yrs_math_ed)
+df1
+df1[1,]
+df1$Years
+
+a = c("Mary","Martha","Kim","Kristen","Amy","Sam")
+b = c("English","Math","Sociology","Math","Music","Dance")
+
+df2 = data.frame(Name = a, Major = b)
+df2
+
+df3 = data.frame(Age = age, Years = yrs_math_ed, Name = a, Major = b)
+df3
+
+df4 = cbind(df1, df2)
+class(df4$Name)
+summary(df4)
+
+d = c(19, 4, "John", "Math")
+
+df5 = rbind(df4, d)
+
+dfCopy = df4
+
+df5[df5$Years > 4,]
+
+df5[df5$Major == "Math",]
+
+#Import data
+Example1 = read.csv("~/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/MSDS_6306_Doing-Data-Science/Unit 1/BusinessSales.csv", header = TRUE)
+Example1$sales
+
+Example2 = read.csv(file.choose(), header = TRUE)
+Example2$sales
+
+df = data.frame(x = c(1,2), y = c(3,4), z = c(5,6))
+df[,2]
+
+```
+
+```{r}
+# Plotting
+Example1 = read.csv("~/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/MSDS_6306_Doing-Data-Science/Unit 1/BusinessSales.csv", header = TRUE)
+head(Example1)
+
+plot(Example1$ad_tv, Example1$sales, pch = 15, xlab = "X", ylab = "Y", main = "Title")
+abline(h = 55, col = "red", lwd = 5)
+
+library(ggplot2)
+
+plot(iris$Petal.Length, iris$Sepal.Length)
+
+irisvir = iris[iris$Species=="virginica",]
+plot(irisvir$Sepal.Length)
+
+# Histograms
+hist(mpg$cty, col = "blue")
+
+# Boxplots
+boxplot(cty~class, data = mpg)
+
+# Dividing plots
+par(mfrow = c(1,2))
+hist(mpg$cty, col = "blue")
+boxplot(cty~class, data = mpg)
+
+
+dev.off()
+hist(iris$Petal.Length)
+
+barplot(df3$Years, names.arg = df3$Name)
+
+summary(mpg$class)
+
+mpg$classFact = as.factor(mpg$class)
+
+barplot(summary(mpg$classFact))
+
+pairs(~mpg+disp+drat+wt, data = mtcars)
+```
+
+```{r}
+# Basic stats
+
+sample1 = rnorm(1000, 0, 1)
+
+hist(sample1)
+mean(sample1)
+sd(sample1)
+
+population = rnorm(100000000, 0 ,1)
+
+sample1 = sample(population, 100)
+hist(sample1)
+mean(sample1)
+sd(sample1)
+
+population = rnom(10000000,0,1)
+
+xBarVec = c()
+xBarGenerator = function(sampleSize = 30, number_of_samples = 100)
+{
+  for (i in 1:number_of_samples) {
+    tempSample = sample(population, sampleSize)
+    xBarVec = c(xBarVec, mean(tempSample))
+  }
+  return(xBarVec)
+}
+
+x=xBarGenerator(30, 1000)
+
+length(x)
+
+x
+
+hist(x)
+
+```
+
+## You Try It
+Now adapt the code above to generate a specified number of sample means of a specified size sample size (this has already been done) from a normally distributed population with a specified meanand standard deviation (currently it is forced to be from a standard normal distribuion N(0,1)).
+
+Run it a few times and use it generate 10000 sample means, each from a sample of size 50, from a normal distribution with mean = 60 and sd = 10.  Provide a distribution (histogram) of the distrubtions as well. 
+
+What is the shape of the distribuion?  What is the mean and sd?  What should they be given the Central Limit Theorem (CLT).  For a refresher of the CLT see the Stats Bridge Course!
+
+```{r}
+
+xBarGenerator = function(mean = 0, sd = 1, sampleSize = 30, number_of_samples = 100)
+{
+  for (i in 1:number_of_samples) {
+    tempSample = rnorm(sampleSize, mean, sd)
+    xBarVec = c(xBarVec, mean(tempSample))
+  }
+  return(xBarVec)
+}
+
+x=xBarGenerator(mean = 60, sd = 10, sampleSize = 50, number_of_samples =  10000)
+
+length(x)
+
+x
+mean(x)
+hist(x)
+
+rnorm
+
+```
+
