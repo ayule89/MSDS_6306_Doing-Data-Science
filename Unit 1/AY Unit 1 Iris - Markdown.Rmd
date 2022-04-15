@@ -1,0 +1,21 @@
+---
+title: "Unit 1 Iris"
+author: "Andrew Yule"
+date: '2022-04-15'
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Iris Data
+
+## Summary of Sepal Length
+
+```{r}
+# Summary of the Iris data
+summary(iris$Sepal.Length)
+```
+
+```{r}
+hist(iris$Sepal.Length, col = "blue", main = "Histogram")
+```

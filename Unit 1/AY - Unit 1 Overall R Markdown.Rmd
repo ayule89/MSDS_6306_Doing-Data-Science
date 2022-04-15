@@ -157,7 +157,7 @@ x
 mean(x)
 hist(x)
 
-rnorm
+
 
 ```
 
