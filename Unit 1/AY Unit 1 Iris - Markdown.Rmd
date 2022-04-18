@@ -17,5 +17,51 @@ summary(iris$Sepal.Length)
 ```
 
 ```{r}
-hist(iris$Sepal.Length, col = "blue", main = "Histogram")
+# Data science profile
+
+categories = c("DataViz", "Machine Learning", "Mathematics", "Statistics", "Computer Science"," Communication", "Domain Expertise")
+rankings = c(8, 3, 6, 4, 6, 5, 8)
+
+barplot(rankings, names.arg = categories, xlab = "", ylab = "Rank", main = "Andrew Yule - Data Science Profile\n(ranking scale: 0 - 10)", ylim = c(0,10))
+
 ```
+
+```{r}
+# CLT
+
+chisq_dist_population = rchisq(10000000, 2)
+
+hist(chisq_dist_population)
+
+mean(chisq_dist_population)
+sd(chisq_dist_population)
+
+summary(chisq_dist_population)
+sd(chisq_dist_population)
+
+xBars = c()
+for (i in 1:10000) {
+  xBars = c(xBars, mean(rchisq(50, 2)))
+}
+
+hist(xBars)
+mean(xBars)
+sd(xBars)
+
+```
+
+```{r}
+# 6-step TTest
+
+sample = c(25, 19, 37, 29, 40, 28, 31)
+
+t.test(sample, mu = 21)
+
+tStat = (mean(sample) - 21) / (sd(sample) / sqrt(length(sample)))
+
+pt(tStat, df = length(sample) - 1, lower.tail = FALSE) * 2
+
+pt(tStat, df = length(sample) - 1, lower.tail = FALSE)
+
+```
+
