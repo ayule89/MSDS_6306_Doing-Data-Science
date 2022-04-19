@@ -1,0 +1,518 @@
+---
+title: "Unit 2 Visualization"
+author: "Andrew"
+date: "4/18/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+## UNIT 2 R Quick Start / Scatterplot, histogram and bar plot.R
+
+### Remember Previous Plots from Unit 1
+### Let's redo them using ggplot2!
+
+Scatterplot
+```{r}
+#install.packages("ggplot2")
+library(tidyverse)
+
+
+# You Try It! (mpg)
+# plot (scatter plot) city mile per gallon (y) versus highway miles per gallon (x).
+
+mpg |> 
+  ggplot(aes(x = hwy, y = cty)) +
+  geom_point()+
+  ggtitle("Some title")
+  
+mpg |>
+  ggplot(aes(x = cty)) + 
+  geom_histogram()
+
+mpg |>
+  ggplot(aes(x = class, y = cty)) +
+  geom_boxplot()
+
+mpg |>
+  ggplot(aes(x = class)) + 
+  geom_bar()
+
+```
+
+
+Histogram
+```{r}
+#Iris histogram
+
+# You Try It!  investigate the distribuion of the city miles per gallon variable for compact cars.  
+
+#You Try It!  No compare the distribution of cty for compact cars to that of SUVs.  
+
+# You Try It Bonus!  In order to compare the distributions, we should put them on the same scale.
+# Research how to change the scale!
+
+
+```
+
+Boxplot
+```{r}
+#Iris Boxplot
+
+# You Try It!
+
+#Find a box plot from the mpg dataset of the city mpg versus the class of car.
+
+```
+
+
+
+### Bar plot with mpg and class
+```{r}
+#With base barplot
+
+# With ggplot /  geom_bar()
+
+```
+
+## Bar plot with toy Student and Math Experience data
+```{r}
+#With base barplot
+age = c(22,21,24,19,20,23)
+yrs_math_ed = c(4,5,2,5,3,5)
+names = c("Mary","Martha","Kim","Kristen","Amy","Sam")
+subject = c("English","Math","Sociology","Math","Music","Dance")
+
+df3 = data.frame(Age = age, Years = yrs_math_ed, Name = names, Subject = subject)
+
+# With ggplot /  geom_bar()   Where does Years go? We will come back to this!
+
+df3 |>
+  ggplot(aex(x))
+
+# You Try It!
+# Iris Data:  Create a Barplot of how many of each Species are in the study.
+
+
+
+# You Try it Bonus: Create a dataframe of how you rank (scale of 1(least) to 10 (best)) traveling by car, train, plane, boat (ship), and bike.
+
+
+```
+
+
+
+## AES
+### AES: X and Y
+```{r}
+mpg |>
+  ggplot(aes(x = class, y = ..prop.., group = 1)) +
+  geom_bar()
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = drv)) +
+  geom_point()
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = drv)) +
+  geom_point(color = "blue")
+
+mpg[mpg$class == "compact",] |>
+  ggplot(aes(x = cty, fill = drv)) +
+  geom_histogram()
+
+summary(mpg)
+  
+mpg |>
+  dplyr::filter(class == "compact") |>
+  ggplot(aes(x = cty, fill = drv)) +
+  geom_histogram()
+
+mpg |>
+  ggplot(aes(x = cty, fill = drv)) +
+  geom_histogram(color = "black")
+
+mpg |>
+  ggplot(aes(x = class, y = cty, fill = drv)) +
+  geom_boxplot(color = "black")
+
+mpg |>
+  ggplot() +
+  geom_point(aes(x = cty, y = hwy, color = drv))
+
+mpg |>
+  ggplot(aes(x = displ, y = hwy, color = drv)) + 
+  geom_point()
+
+```
+
+### AES: color
+```{r}
+
+# color = "blue" is not a mapping of a variable
+
+#note that color is not in an ”aes”
+# function we are setting them manually.
+
+# note now we are ”mapping” fill to a variable (drv).
+
+#note that fill and color are not in an ”aes” function we are setting them manually.
+# We are not “mapping” variables to colors… rather just setting the color.  
+
+# note now we are ”mapping” fill to a variable (drv).
+
+#note that fill and color are not in an ”aes” function we are setting them manually.
+# We are not “mapping” variables to colors… rather just setting the color.  
+
+
+```
+
+
+### AES: size
+```{r}
+
+```
+
+
+### AES: size
+```{r}
+
+
+```
+
+
+### AES: size
+```{r}
+
+
+```
+
+
+
+### AES: alpha
+```{r}
+
+
+```
+
+### AES: shape
+```{r}
+
+
+```
+
+
+## GEOMS
+
+### geom_smooth
+```{r}
+
+
+```
+
+### geom_smooth you try it
+```{r}
+
+
+#Global aes() ... one aes that applies to all layers
+
+#Individual aes() …. an aesthetic for each layer
+
+#Individual aes() …. an aesthetic for each layer
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty)) + 
+  geom_point(aes(color = class)) +
+  geom_smooth(aes(linetype = drv))
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = class)) + 
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~class)
+
+mpg |>
+  ggplot(aes(x = hwy)) +
+  geom_histogram()
+
+```
+
+### labels
+```{r}
+
+mpg |>
+  ggplot(aes(x = class, y = cty)) +
+  geom_boxplot() +
+  ggtitle("XX") +
+  xlab("X") + 
+  ylab("Y")
+
+```
+
+
+### facets
+facet wrap
+```{r}
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = class)) +
+  geom_point() + 
+  geom_smooth() +
+  facet_wrap(~class)
+
+
+```
+
+facet grid
+```{r}
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = class)) +
+  geom_point() + 
+  geom_smooth() +
+  facet_grid(drv~class)
+
+
+```
+
+## Transformations
+```{r}
+
+#stat = identity adds the values of the y value per class (x level)
+
+mpg |>
+  ggplot(aes(x = class)) +
+  geom_bar(stat = "count")
+
+mpg |>
+  ggplot(aes(x = class, y = hwy)) +
+  geom_bar(stat = "identity")
+
+mpg |>
+  ggplot(aes(x = class, y = hwy)) +
+  geom_point()
+
+```
+
+## Positions
+### stack
+```{r}
+
+mpg |>
+  ggplot(aes(x = class, fill = drv)) +
+  geom_bar(position = "fill")
+
+```
+
+### dodge
+```{r}
+
+mpg |>
+  ggplot(aes(x = class, fill = drv)) +
+  geom_bar(position = "dodge")
+
+```
+
+### fill
+```{r}
+
+```
+
+### jitter
+```{r}
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty)) +
+  geom_point(position = "jitter")
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty)) +
+  geom_point()
+
+```
+
+## Other Coordinate Systems
+### coord_flip
+```{r}
+
+mpg |>
+  ggplot(aes(x = class, fill = class)) +
+  geom_bar() +
+  coord_flip()
+
+```
+
+### coord_polar
+```{r}
+
+mpg |>
+  ggplot(aes(x = class, fill = class)) +
+  geom_bar() +
+  coord_polar()
+
+```
+
+### coord_quickmap and map_data
+```{r}
+install.packages("maps")
+library(maps)
+
+usa = map_data("usa")
+
+usa
+
+p <- ggplot() + 
+  geom_polygon(data = usa, aes(x = long, y = lat, group = group), fill = "blue", color = "black") +
+  coord_quickmap()
+p
+
+#Dallas Coords
+Dallas <- tibble(
+  long = c(-96.7970),
+  lat = c(32.7767),
+  names = c("Dallas")) 
+
+p + geom_point(data = Dallas, aes(x = long, y = lat), shape = 21, color = "black", fill = "yellow", size = 5) +
+  geom_text(data = Dallas, aes(x = long, y = lat, label = names), hjust = 0, nudge_x = 2, color = "white")
+
+
+#Italy Map
+italy = map_data("italy")
+ggplot(italy, aes(long,lat, group = group)) + 
+geom_polygon(fill = "white", color = "black") +
+coord_quickmap()
+
+?map_data
+map_data(maps::)
+```
+
+## themes
+```{r}
+install.packages("ggthemes")
+library(ggthemes)
+
+#excel
+mpg |>
+  ggplot(mapping = aes(x = hwy, y = cty)) + 
+  geom_point(position = "jitter") + 
+  ggtitle("City MPG v. Highway MPG") + 
+  theme_excel()
+
+mpg %>% 
+  ggplot(mapping = aes(x = class, fill = class)) +  
+  geom_bar() + 
+  theme_excel()
+
+#Economist
+mpg |>
+  ggplot(mapping = aes(x = hwy, y = cty)) + 
+  geom_point(position = "jitter") + 
+  ggtitle("City MPG v. Highway MPG") + 
+  theme_economist()
+
+mpg %>% 
+  ggplot(mapping = aes(x = class, fill = class)) +  
+  geom_bar() + 
+  theme_economist()
+
+
+#538
+mpg |>
+  ggplot(mapping = aes(x = hwy, y = cty)) + 
+  geom_point(position = "jitter") + 
+  ggtitle("City MPG v. Highway MPG") + 
+  theme_fivethirtyeight()
+
+mpg %>% 
+  ggplot(mapping = aes(x = class, fill = class)) +  
+  geom_bar() + 
+  theme_fivethirtyeight()
+
+mpg |>
+  ggplot(mapping = aes(x = hwy, y = cty)) + 
+  geom_point(position = "jitter") + 
+  ggtitle("City MPG v. Highway MPG") + 
+  theme_bw()
+mpg %>% 
+  ggplot(mapping = aes(x = class, fill = class)) +  
+  geom_bar() + 
+  theme_bw()
+
+```
+
+## Plotly!!!
+```{r}
+
+install.packages("plotly")
+
+#MPG
+library(ggthemes)
+library(plotly)
+
+p = mpg %>% 
+ggplot(mapping = aes(x = hwy, y = cty)) + 
+geom_point(position = "jitter") + ggtitle("City MPG v. Highway MPG") + theme_excel()
+
+p
+ 
+ggplotly(p)
+
+
+p = mpg[mpg$class == "compact",] %>% 
+ggplot(aes(x = cty, fill = drv)) + 
+geom_histogram(color = "blue") 
+
+p
+
+ggplotly(p)
+
+mpg |>
+  ggplot(mapping = aes(x = hwy, y = cty)) + 
+  geom_point(position = "jitter") +
+  ggtitle("City MPG v. Highway MPG") + 
+  theme_excel()
+```
+
+Student Data
+```{r}
+#generating the data
+age = c(22,21,24,19,20,23)
+yrs_math_ed = c(4,5,2,5,3,5)
+names = c("Mary","Martha","Kim","Kristen","Amy","Sam")
+subject = c("English","Math","Sociology","Math","Music","Dance")
+df3 = data.frame(Age = age, Years = yrs_math_ed, Name = names, Subject = subject)
+
+#plotting code
+p = df3 %>% 
+ggplot(aes(x = Name, y = Years)) + 
+geom_bar(stat = "identity") + 
+ggtitle("Distribution of Class")
+
+#enabling interactive piece
+ggplotly(p)
+```
+
+## 3D Plots With Plotly
+```{r}
+#mpg
+p <- plot_ly(mpg, x = ~cty, y = ~hwy, z = ~displ, color = ~drv) %>%
+   add_markers() %>%
+   layout(scene = list(xaxis = list(title = 'City MPG'),
+                      yaxis = list(title = 'Displacement'),
+                      zaxis = list(title = 'Highway MPG')))
+p
+
+# You Try... Create a 3D plot with plotly with x = sepal width, y = sepal.length, z = petal.width
+
+
+
+
+p <- plot_ly(iris, x = ~Sepal.Width, y = ~Sepal.Length, z = ~Petal.Width, color = ~Species) %>%
+   add_markers() %>%
+   layout(scene = list(xaxis = list(title = 'Sepal Width'),
+                      yaxis = list(title = 'Sepal.Length'),
+                      zaxis = list(title = 'Petal.Width')))
+p
+```
+
+
+
