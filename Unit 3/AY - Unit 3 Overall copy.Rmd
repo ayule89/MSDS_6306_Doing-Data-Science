@@ -1,0 +1,68 @@
+---
+title: "Unit 3 Overall"
+author: "Andrew"
+date: "4/24/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+```
+
+Filtering
+```{r}
+compactCarsMPG = mpg |>
+  filter(class == "compact") |>
+  select(cty)
+
+mpg |>
+  filter(class == "compact") |>
+  ggplot(aes(x = cty)) +
+  geom_histogram()
+
+mpg |> 
+  filter(year < 2000)
+
+mpg |>
+  filter(class == "suv" & (cty > 13 | hwy > 10))
+```
+
+Missing
+```{r}
+x = NA
+
+is.na(x)
+
+#Dataframe for the Example
+age = c(22,21,NA,24,19,20,23)
+yrs_math_ed = c(4,5,NA,2,5,3,5)
+names = c("Mary","Martha","Rosy","Kim","Kristen","Amy","Sam")
+subject = c("English","Math",NA,"Sociology","Math","Music","Dance")
+df = data.frame(Age = age, Years = yrs_math_ed,Name = names, Major = subject)
+df
+
+is.na(df$Years)
+is.na((df$Name))
+
+df |>
+  filter(!is.na(Years))
+```
+
+Arranging
+```{r}
+mpg |>
+  arrange(manufacturer, cty) |>
+  view()
+
+df |>
+  arrange(df$Name)
+
+df |>
+  arrange(Age)
+```
+
+
+
