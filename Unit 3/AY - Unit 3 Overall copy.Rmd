@@ -64,5 +64,308 @@ df |>
   arrange(Age)
 ```
 
+Select
+```{r}
+mpg |>
+  select(class, cty, hwy)
 
+library(GGally)
+
+mpg |>
+  select(class, cty, hwy) |>
+  ggpairs(aes(color = class))
+
+fifa = read_csv("/Users/andrewyule/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/MSDS_6306_Doing-Data-Science/Unit 3/FIFA Players.csv")
+
+fifa |> view()
+
+fifa |>
+  select(Finishing, BallControl, ShotPower) |>
+  ggpairs()
+
+fifa |>
+  filter(`Preferred Foot` == "Right" | `Preferred Foot` == "Left") |>
+  select(Finishing, BallControl,ShotPower, `Preferred Foot`) |>
+  ggpairs(aes(color = `Preferred Foot`))
+
+library(nycflights13)
+
+```
+
+Mutate
+```{r}
+mpgDiff = mpg |>
+  mutate(diffHC = hwy - cty)
+
+mpgDiff |>
+  ggplot(aes(x = displ, y = diffHC, color = class)) +
+  geom_point()
+
+mpgDiff |>
+  select(diffHC) |>
+  min()
+mpg
+mpg |>
+  mutate(diffHC = hwy - cty) |>
+  ggplot(aes(x = displ, y = diffHC, color = model)) +
+  geom_point()
+```
+
+Group By
+```{r}
+
+mpg |>
+  group_by(class) |>
+  summarize(meanCTY = mean(cty), std = sd(cty), count = n())
+
+mpg |>
+  group_by(class, year) |>
+  summarize(meanCTY = mean(cty), count = n())
+
+mpg |>
+  ggplot(aes(x = class, y = cty)) +
+  geom_bar(stat = "identity")
+
+fifa$Position
+
+fifa |>
+  filter(!is.na(BallControl) & !is.na(Position)) |>
+  group_by(Position) |>
+  summarize(meanBC = mean(BallControl), count = n()) |>
+  ggplot(aes(x = reorder(Position, meanBC), y = meanBC)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+```
+
+Factors
+```{r}
+
+#Dataframe for the Example
+age = c(22,21,NA,24,19,20,23)
+yrs_math_ed = c(4,5,NA,2,5,3,5)
+names = c("Mary","Martha","Rosy","Kim","Kristen","Amy","Sam")
+subject = c("English","Math",NA,"Sociology","Math","Music","Dance")
+df = data.frame(Age = age, Years = yrs_math_ed,Name = names, Major = subject)
+df
+
+str(df)
+
+summary(mpg$cyl)
+mpg$cyl
+as.factor(mpg$cyl)
+factor(mpg$cyl)
+
+mpg$cyl
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = cyl)) +
+  geom_point()
+
+mpg |>
+  ggplot(aes(x = hwy, y = cty, color = as.factor(cyl))) +
+  geom_point()
+
+fifa |>
+  filter(!is.na(BallControl) & !is.na(Position)) |>
+  group_by(Position) |>
+  summarize(meanBC = mean(BallControl), count = n()) |>
+  ggplot(aes(x = reorder(Position, meanBC), y = meanBC)) + 
+  geom_bar(stat = "identity")
+
+displ_Factor = cut(mpg$displ, breaks = c(1,4,6,8), labels = c("Low", "Medium", "High"))
+displ_Factor
+
+mpg |>
+  mutate(displ_Factor = displ_Factor) |>
+  ggplot(aes(x = hwy, y = cty, color = displ_Factor)) +
+  geom_point()
+```
+
+EDA - Distributions
+```{r}
+mpg |>
+  ggplot(aes(x = class, fill = class)) + 
+  geom_bar()
+
+mpg |>
+  group_by(class) |>
+  summarize(n())
+
+totals = mpg |>
+  count(class)
+
+ggplot() +
+  geom_bar(data = mpg, aes(x = class, fill = class)) +
+  geom_text(data = totals, aes(x = class, y = n + 2, label = n))
+
+mpg |>
+  ggplot(aes(x = cty, fill = class)) +
+  geom_histogram()
+
+mpg |>
+  ggplot(aes(x = cty, color = class)) +
+  geom_freqpoly()
+
+mpg |>
+  ggplot(aes(x = class, y = cty, color = class)) +
+  geom_boxplot()
+
+mpg |>
+  ggplot(aes(x = cty, color = class)) +
+  geom_histogram() +
+  facet_wrap(~class, ncol = 1)
+
+diamonds |>
+  summary()
+
+diamonds |>
+  ggplot(aes(x = carat, y = price)) +
+  geom_point()
+
+diamonds |>
+  ggplot(aes(x = price)) +
+  geom_histogram()
+
+diamonds |>
+  ggplot(aes(x = x)) +
+  geom_histogram()
+
+diamonds |>
+  ggplot(aes(x = fct_reorder(cut, price, median), y = price)) +
+  geom_boxplot()
+
+diamonds |>
+  ggplot(aes(x = fct_reorder(color, price, median), y = price)) +
+  geom_boxplot()
+
+diamonds |>
+  ggplot(aes(x = fct_reorder(clarity, price, median), y = price)) +
+  geom_boxplot()
+
+diamonds |>
+  ggplot(aes(x = fct_reorder(clarity, price, median), y = price)) +
+  geom_boxplot()
+
+mpg |>
+  group_by(class) |>
+  summarize(mean = mean(cty), sd = sd(cty), median = median(cty), range = max(cty) - min(cty), IQR = IQR(cty), count = n())
+
+```
+
+```{r}
+
+df = data.frame(x = c(1,2,3,4), y =c(3,4,5,6), z = c(1,2,3,14))
+df
+sapply(df,function(x) mean(x))
+
+df |>
+  summarize(x = mean(x), y = mean(y))
+
+a = read.csv("/Users/andrewyule/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/MSDS_6306_Doing-Data-Science/Unit 3/MissingDataToy.csv")
+
+b = read_csv("/Users/andrewyule/Dropbox/Personal/SMU MSDS/03 - Doing Data Science/MSDS_6306_Doing-Data-Science/Unit 3/MissingDataToy.csv")
+
+sapply(a, function(x) sum(is.na(x)))
+sapply(b, function(x) sum(is.na(x)))
+
+install.packages("naniar")
+library(naniar)
+
+gg_miss_var(b)
+
+gg_miss_var(fifa[,1:40])
+
+gg_miss_var(flights)
+sapply(flights, function(x) sum(is.na(x)))
+```
+
+
+```{r}
+gg_miss_var(diamonds)
+
+sapply(diamonds, function(x) sum(is.na(x)))
+
+diamonds |>
+  ggplot(aes(x = z)) +
+  geom_histogram()
+
+diamonds |>
+  mutate(z = ifelse(z < 3 | z > 20, NA, z)) |>
+  select(z) |>
+  sapply(function(x) sum(is.na(x)))
+
+diamonds |>
+  ggplot(aes(x = z)) +
+  geom_histogram()
+
+diamonds |>
+  ggplot(aes(x = z)) +
+  geom_boxplot()
+
+sum(diamonds$z > 4)
+
+hist(diamonds$z)
+
+mpg |>
+  ggplot(aes(y = cty, color = class)) +
+  geom_boxplot()
+
+mpg |>
+  ggplot(aes(x = cty, color = class)) +
+  geom_histogram() +
+  facet_grid(rows = vars(class))
+
+```
+
+Example EDA - Diamonds
+```{r}
+library(GGally)
+
+diamonds |>
+  select(price, carat, cut) |>
+  ggpairs(aes(color = cut))
+
+diamonds |>
+  ggplot(aes(x = carat, y = price, color = cut)) +
+  geom_point() +
+  geom_smooth() +
+  scale_x_log10() +
+  scale_y_log10()
+
+diamonds |>
+  ggplot(aes(x = log(carat), y = log(price))) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  ylim(c(5.5, 10))
+
+diamonds |>
+  ggplot(aes(x = cut, y = price, color = cut)) +
+  geom_boxplot()
+
+diamonds |>
+  group_by(cut) |>
+  summarize(slope = exp(lm(log(price)~log(carat))$coefficients))
+
+diamonds |>
+  mutate(lcarat = log(carat), lprice = log(price)) |>
+  ggplot(aes(x = lcarat, y = lprice)) +
+  geom_point()
+
+temp = diamonds |>
+  mutate(lcarat = log(carat), lprice = log(price))
+
+fit = lm(lprice~lcarat, temp)
+
+diamonds |>
+  mutate(resids = exp(fit$residuals)) |>
+  ggplot(aes(x = carat, y = resids, color = cut)) +
+  geom_point()
+
+diamonds |>
+  mutate(resids = exp(fit$residuals)) |>
+  ggplot(aes(x = cut, y = resids, color = cut)) +
+  geom_boxplot()
+
+```
 

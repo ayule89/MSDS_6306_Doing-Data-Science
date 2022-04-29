@@ -250,9 +250,9 @@ sapply(flights, function(x) sum(is.na(x)))
 ##Ouliers
 ```{r}
 #Find unusual city mpg values
-library(ploltly)
+library(plotly)
 p = mpg %>% 
-ggplot(aes(x = cty)) + geom_histogram()
+  ggplot(aes(x = cty)) + geom_histogram()
 ggplotly(p)
 
 #Find unusual city mpg values
